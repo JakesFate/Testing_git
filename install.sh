@@ -24,8 +24,8 @@ get_distribution(){
     output ""
 
     if [ "$lsb_dist" =  "ubuntu" ]; then
-        if [ "$dist_version" != "19.10" ] && [ "$dist_version" != "19.04" ] && [ "$dist_version" != "18.10" ] && [ "$dist_version" != "18.04" ] && [ "$dist_version" != "16.04" ] && [ "$dist_version" != "14.04" ]; then
-            output "Unsupported Ubuntu version. Only Ubuntu 19.10, 18.10, 18.04, 16.04, and 14.04 are supported."
+        if [ "$dist_version" != "19.*" ] && [ "$dist_version" != "19.*" ] && [ "$dist_version" != "18.10" ] && [ "$dist_version" != "18.04" ] && [ "$dist_version" != "16.04" ] && [ "$dist_version" != "14.04" ]; then
+            output "Unsupported Ubuntu version. Only Ubuntu 19.10, 19.04, 18.10, 18.04, 16.04, and 14.04 are supported."
             exit 0
         fi
 	elif [ "$lsb_dist" = "debian" ]; then
@@ -34,7 +34,7 @@ get_distribution(){
             exit 0
 		fi
     elif [ "$lsb_dist" = "fedora" ]; then
-        if [ "$dist_version" != "31" ] &&[ "$dist_version" != "30" ] && [ "$dist_version" != "29" ] && [ "$dist_version" != "28" ]; then
+        if [ "$dist_version" != "31" ] && [ "$dist_version" != "30" ] && [ "$dist_version" != "29" ] && [ "$dist_version" != "28" ]; then
             output "Unsupported Fedora version. Only Fedora 31 is supported."
             exit 0
         fi
@@ -52,7 +52,7 @@ get_distribution(){
         output "Unsupported Operating System."
         output ""
         output "Supported OS:"
-        output "Ubuntu: 19.10, 18.10, 18.04, 16.04 14.04"
+        output "Ubuntu: 19.10, 19.04, 18.10, 18.04, 16.04 14.04"
         output "Debian: 10, 9, 8"
         output "Fedora: 31"
         output "CentOS: 7, 8"
