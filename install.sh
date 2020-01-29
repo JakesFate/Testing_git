@@ -220,8 +220,7 @@ theme() {
         curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/BlackEndSpace/build.sh | sh
     elif [ "$themeoption" = "9" ]; then
         curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/NothingButGraphite/build.sh | sh
-    fi
-}
+    fi }
 
 repositories_setup() {
     output "Configuring your repositories."
