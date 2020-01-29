@@ -223,7 +223,7 @@ theme() {
     fi
 }
 
-repositories_setup(){
+repositories_setup() {
     output "Configuring your repositories."
     if [ "$lsb_dist" =  "ubuntu" ] || [ "$lsb_dist" =  "debian" ]; then
         apt-get -y install sudo
