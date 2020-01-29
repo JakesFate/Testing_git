@@ -44,7 +44,7 @@ get_distribution(){
             exit 0
         fi
     elif [ "$lsb_dist" = "rhel" ]; then
-        if [ "$dist_version" != "7" ]&&[ "$dist_version" != "7.1" ]&&[ "$dist_version" != "7.2" ]&&[ "$dist_version" != "7.3" ]&&[ "$dist_version" != "7.4" ]&&[ "$dist_version" != "7.5" ]&&[ "$dist_version" != "7.6" ]; then
+        if [ "$dist_version" != "7" ]&&[ "$dist_version" != "7.1" ]&&[ "$dist_version" != "7.3" ]&&[ "$dist_version" != "7.3" ]&&[ "$dist_version" != "7.4" ]&&[ "$dist_version" != "7.5" ]&&[ "$dist_version" != "7.6" ]; then
             output "Unsupported RHEL version. Only RHEL 7 is supported."
             exit 0
         fi
@@ -110,7 +110,7 @@ get_virtualization(){
 }
 
 server_options() {
-    output "Please select what you would like to install:\n[1] Install panel (v0.7.15).\n[2] Install daemon (v0.6.12).\n[3] Install the panel and daemon.\n[4] Upgrade 0.7.x panel to 0.7.15.\n[5] Upgrade 0.6.x daemon to 0.6.12.\n[6] Install the standalone SFTP server (Only use this after you have installed and configured the daemon. Ubuntu 14.04 is NOT supported.)\n[7] Emergency MariaDB root password reset."
+    output "Please select what you would like to install:\n[1] Install panel (v0.7.16).\n[2] Install daemon (v0.6.12).\n[3] Install the panel and daemon.\n[4] Upgrade 0.7.x panel to 0.7.16.\n[5] Upgrade 0.6.x daemon to 0.6.12.\n[6] Install the standalone SFTP server (Only use this after you have installed and configured the daemon. Ubuntu 14.04 is NOT supported.)\n[7] Emergency MariaDB root password reset."
     read choice
     case $choice in
         1 ) installoption=1
@@ -155,7 +155,7 @@ webserver_options() {
 }
 
 theme_options() {
-    output "Would you like to install Fonix's themes? :\n[1] No.\n[2] Graphite theme.\n[3] Midnight theme."
+    output "Would you like to install Fonix's themes? :\n[1] No.\n[2] Pink'An'Fluffy.\n[3] Tango Twist theme.\n[4] Blue Brick theme.\n[5] Minecraft Madness theme.\n[6] Lime Stitch theme.\n[7] Red Ape theme.\n[8] BlackEnd Space theme.\n[9] Graphite theme."
     output "You can find out about Fonix's themes here: https://github.com/TheFonix/Pterodactyl-Themes"
     read choice
     case $choice in
@@ -163,10 +163,28 @@ theme_options() {
             output "You have selected to install vanilla Pterodactyl theme."
             ;;
         2 ) themeoption=2
-            output "You have selected to install Fonix's Graphite theme."
+            output "You have selected to install Fonix's Pink'An'Fluffy theme."
             ;;
         3 ) themeoption=3
-            output "You have selected panel and Fonix's Midnight theme."
+            output "You have selected panel and Fonix's Tango Twist theme."
+            ;;
+        4 ) themeoption=4
+            output "You have selected panel and Fonix's Blue Brick theme."
+            ;;
+        5 ) themeoption=5
+            output "You have selected panel and Fonix's Minecraft Madness theme."
+            ;;
+        6 ) themeoption=6
+            output "You have selected panel and Fonix's Lime Stitch theme."
+            ;;
+        7 ) themeoption=7
+            output "You have selected panel and Fonix's Red Ape theme."
+            ;;
+        8 ) themeoption=8
+            output "You have selected panel and Fonix's BlackEnd Space theme."
+            ;;
+        9 ) themeoption=9
+            output "You have selected panel and Fonix's Graphite theme."
             ;;
         * ) output "You did not enter a a valid selection"
             theme_options
@@ -187,9 +205,21 @@ theme() {
     if [ "$themeoption" = "1" ]; then
         output "Keeping Pterodactyl's vanilla theme."
     elif [ "$themeoption" = "2" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/Pterodactyl-7/Graphite/build.sh | sh    
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/PinkAnFluffy/build.sh | sh    
     elif [ "$themeoption" = "3" ]; then
-        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/Pterodactyl-7/Midnight/build.sh | sh
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/TangoTwist/build.sh | sh
+    elif [ "$themeoption" = "4" ]; then
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/BlueBrick/build.sh | sh
+    elif [ "$themeoption" = "5" ]; then
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/MinecraftMadness/build.sh | sh
+    elif [ "$themeoption" = "6" ]; then
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/LimeStitch/build.sh | sh
+    elif [ "$themeoption" = "7" ]; then
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/RedApe/build.sh | sh
+    elif [ "$themeoption" = "8" ]; then
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/BlackEndSpace/build.sh | sh
+    elif [ "$themeoption" = "9" ]; then
+        curl https://raw.githubusercontent.com/TheFonix/Pterodactyl-Themes/master/MasterThemes/NothingButGraphite/build.sh | sh
     fi
 }
 
@@ -203,22 +233,30 @@ repositories_setup(){
             LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
             add-apt-repository -y ppa:chris-lea/redis-server
             add-apt-repository -y ppa:certbot/certbot
+            if [ "$dist_version" = "19.10" ]; then
+                apt-get install software-properties-common
+                apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+                add-apt-repository 'deb [arch=amd64] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu eoan main'
+            if [ "$dist_version" = "19.04" ]; then
+                apt-get install software-properties-common
+                apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+                add-apt-repository 'deb [arch=amd64] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu disco main'
             if [ "$dist_version" = "18.10" ]; then
                 apt-get install software-properties-common
                 apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-                add-apt-repository 'deb [arch=amd64] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu cosmic main'
+                add-apt-repository 'deb [arch=amd64] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu cosmic main'
             elif [ "$dist_version" = "18.04" ]; then
                 add-apt-repository -y ppa:nginx/stable
                 apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-                add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main'
+                add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu bionic main'
             elif [ "$dist_version" = "16.04" ]; then
                 add-apt-repository -y ppa:nginx/stable
                 apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-                add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu xenial main'
+                add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu xenial main'
             elif [ "$dist_version" = "14.04" ]; then
                 add-apt-repository -y ppa:ondrej/nginx
                 apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-                add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu trusty main'            
+                add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.4/ubuntu trusty main'            
             fi
         elif [ "$lsb_dist" =  "debian" ]; then
             apt-get -y install ca-certificates apt-transport-https
@@ -227,19 +265,19 @@ repositories_setup(){
                 wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
                 sudo echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
                 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
-                sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/debian stretch main'
+                sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/debian stretch main'
             elif [ "$dist_version" = "9" ]; then
                 apt-get -y install software-properties-common dirmngr
                 wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
                 sudo echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
                 sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
-                sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/debian stretch main'
+                sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/debian stretch main'
             elif [ "$dist_version" = "8" ]; then
                 apt-get -y install software-properties-common
                 wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
                 echo "deb https://packages.sury.org/php/ jessie main" | sudo tee /etc/apt/sources.list.d/php.list
                 apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-                add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/debian jessie main'
+                add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.4/debian jessie main'
             fi
         fi
         apt-get -y update 
@@ -252,7 +290,7 @@ repositories_setup(){
             bash -c 'cat > /etc/yum.repos.d/mariadb.repo' <<-'EOF'
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.3/fedora28-amd64
+baseurl = http://yum.mariadb.org/10.4/fedora28-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
@@ -275,7 +313,7 @@ EOF
             bash -c 'cat > /etc/yum.repos.d/mariadb.repo' <<-'EOF'
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.3/centos7-amd64
+baseurl = http://yum.mariadb.org/10.4/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
@@ -300,7 +338,7 @@ EOF
             bash -c 'cat > /etc/yum.repos.d/mariadb.repo' <<-'EOF'        
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.3/rhel7-amd64
+baseurl = http://yum.mariadb.org/10.4/rhel7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EOF
@@ -321,7 +359,7 @@ EOF
             yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
         fi
         yum -y install yum-utils
-        yum-config-manager --enable remi-php72
+        yum-config-manager --enable remi-php73
         yum -y upgrade
         yum -y autoremove
         yum -y clean packages
@@ -332,9 +370,9 @@ install_dependencies(){
     output "Installing dependencies."
     if  [ "$lsb_dist" =  "ubuntu" ] ||  [ "$lsb_dist" =  "debian" ]; then
         if [ "$webserver" = "1" ]; then
-            apt-get -y install php7.2 php7.2-cli php7.2-gd php7.2-mysql php7.2-pdo php7.2-mbstring php7.2-tokenizer php7.2-bcmath php7.2-xml php7.2-fpm php7.2-curl php7.2-zip curl tar unzip git redis-server nginx git wget
+            apt-get -y install php7.3 php7.3-cli php7.3-gd php7.3-mysql php7.3-pdo php7.3-mbstring php7.3-tokenizer php7.3-bcmath php7.3-xml php7.3-fpm php7.3-curl php7.3-zip curl tar unzip git redis-server nginx git wget
         elif [ "$webserver" = "2" ]; then
-            apt-get -y install php7.2 php7.2-cli php7.2-gd php7.2-mysql php7.2-pdo php7.2-mbstring php7.2-tokenizer php7.2-bcmath php7.2-xml php7.2-fpm php7.2-curl php7.2-zip curl tar unzip git redis-server apache2 libapache2-mod-php7.2 redis-server git wget
+            apt-get -y install php7.3 php7.3-cli php7.3-gd php7.3-mysql php7.3-pdo php7.3-mbstring php7.3-tokenizer php7.3-bcmath php7.3-xml php7.3-fpm php7.3-curl php7.3-zip curl tar unzip git redis-server apache2 libapache2-mod-php7.3 redis-server git wget
         fi
         sh -c "DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-server"
     elif [ "$lsb_dist" =  "fedora" ] ||  [ "$lsb_dist" =  "centos" ] ||  [ "$lsb_dist" =  "rhel" ]; then
@@ -347,7 +385,7 @@ install_dependencies(){
 
     output "Enabling Services."
     systemctl enable php-fpm
-    systemctl enable php7.2-fpm
+    systemctl enable php7.3-fpm
     if [ "$webserver" = "1" ]; then
         systemctl enable nginx
     elif [ "$webserver" = "2" ]; then
@@ -364,7 +402,7 @@ install_dependencies(){
     systemctl enable cron
     systemctl enable mariadb
     service php-fpm start
-    service php7.2-fpm start
+    service php7.3-fpm start
     if [ "$webserver" = "1" ]; then
         service nginx start
     elif [ "$webserver" = "2" ]; then
@@ -467,7 +505,7 @@ install_pterodactyl() {
     output "Downloading Pterodactyl."
     mkdir -p /var/www/pterodactyl
     cd /var/www/pterodactyl
-    curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/download/v0.7.15/panel.tar.gz
+    curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/download/v0.7.16/panel.tar.gz
     tar --strip-components=1 -xzvf panel.tar.gz
     chmod -R 755 storage/* bootstrap/cache/
 
@@ -500,7 +538,7 @@ install_pterodactyl() {
 upgrade_pterodactyl(){
     cd /var/www/pterodactyl
     php artisan down
-    curl -L https://github.com/pterodactyl/panel/releases/download/v0.7.15/panel.tar.gz | tar --strip-components=1 -xzv
+    curl -L https://github.com/pterodactyl/panel/releases/download/v0.7.16/panel.tar.gz | tar --strip-components=1 -xzv
     unzip panel
     chmod -R 755 storage/* bootstrap/cache
     composer install --no-dev --optimize-autoloader
@@ -513,7 +551,7 @@ upgrade_pterodactyl(){
     semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/pterodactyl/storage(/.*)?"
     restorecon -R /var/www/pterodactyl
     fi
-    output "Your panel has been updated to version 0.7.15."
+    output "Your panel has been updated to version 0.7.16."
     php artisan up
     php artisan queue:restart
 }
@@ -588,7 +626,7 @@ server {
 
     location ~ \.php$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param PHP_VALUE "upload_max_filesize = 100M \n post_max_size=100M";
@@ -791,7 +829,7 @@ install_daemon() {
     sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& swapaccount=1/' /etc/default/grub
     if  [ "$lsb_dist" =  "ubuntu" ] ||  [ "$lsb_dist" =  "debian" ]; then
         sudo update-grub
-        curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+        curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
         apt -y install nodejs make gcc g++ node-gyp
         apt-get -y update 
         apt-get -y upgrade
@@ -799,7 +837,7 @@ install_daemon() {
         apt-get -y autoclean
     elif  [ "$lsb_dist" =  "fedora" ] ||  [ "$lsb_dist" =  "centos" ] ||  [ "$lsb_dist" =  "rhel" ]; then
         grub2-mkconfig -o "$(readlink /etc/grub2.conf)"
-        curl --silent --location https://rpm.nodesource.com/setup_10.x | sudo bash -
+        curl --silent --location https://rpm.nodesource.com/setup_13.x | sudo bash -
         yum -y install nodejs gcc-c++ make
         yum -y upgrade
         yum -y autoremove
